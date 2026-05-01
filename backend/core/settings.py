@@ -2,14 +2,26 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
-# Load environment variables from .env file
-load_dotenv()
-
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+def _env_bool(name: str, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    value = raw.strip().lower()
+    if value in ('1', 'true', 't', 'yes', 'y', 'on'):
+        return True
+    if value in ('0', 'false', 'f', 'no', 'n', 'off'):
+        return False
+    return default
+
+# Load environment variables from backend/.env (without overriding existing env vars)
+load_dotenv(BASE_DIR / '.env')
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')
 
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+# Prefer DJANGO_DEBUG to avoid collisions with global DEBUG env vars.
+DEBUG = _env_bool('DJANGO_DEBUG', _env_bool('DEBUG', False))
 
 ALLOWED_HOSTS = ['*']  # We'll restrict this in production
 
@@ -135,3 +147,19 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS':  True,
     'BLACKLIST_AFTER_ROTATION': True,
 }
+
+# ─── Social Login (OAuth) ─────────────────────────────────
+GOOGLE_OAUTH_CLIENT_IDS = [
+    cid.strip()
+    for cid in os.getenv('GOOGLE_OAUTH_CLIENT_IDS', '').split(',')
+    if cid.strip()
+]
+
+APPLE_SIGN_IN_CLIENT_IDS = [
+    cid.strip()
+    for cid in os.getenv('APPLE_SIGN_IN_CLIENT_IDS', '').split(',')
+    if cid.strip()
+]
+
+FACEBOOK_APP_ID = os.getenv('FACEBOOK_APP_ID', '')
+FACEBOOK_APP_SECRET = os.getenv('FACEBOOK_APP_SECRET', '')
