@@ -22,12 +22,10 @@ class AppTheme {
         primary: primaryBlue,
         secondary: deepMidnight,
         surface: surfaceWhite,
-        background: background,
         error: Colors.redAccent,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: deepMidnight,
-        onBackground: deepMidnight,
       ),
       textTheme: GoogleFonts.manropeTextTheme().copyWith(
         displayLarge: GoogleFonts.manrope(fontSize: 32, fontWeight: FontWeight.w800, color: deepMidnight, letterSpacing: -0.64),
@@ -90,4 +88,17 @@ class AppTheme {
       ),
     );
   }
+}
+
+class AppColors {
+  static const Color primary = Color(0xFF4682B4);
+  static const Color accent = Color(0xFF5CE1E6);
+  static const Color white = Colors.white;
+  static const Color border = Color(0xFFE5E7EB);
+
+  static const LinearGradient primaryGradient = LinearGradient(
+    colors: [primary, accent],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 }

@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'theme/app_theme.dart';
-import 'screens/customer_onboarding_screen.dart';
-import 'screens/provider_onboarding_screen.dart';
-import 'screens/sign_up_screen.dart';
-import 'screens/login_screen.dart';
-import 'screens/service_browsing_screen.dart';
-import 'screens/provider_profile_screen.dart';
-import 'screens/booking_confirmation_screen.dart';
-import 'screens/payment_screen.dart';
+import 'screens/onboarding/onboarding_splash.dart';
+import 'screens/onboarding/onboarding_language.dart';
+import 'screens/onboarding/onboarding_carousel.dart';
+import 'screens/auth/login_screen.dart';
+import 'screens/auth/register_screen.dart';
+import 'screens/customer_dashboard_temp.dart';
+import 'screens/provider_screens/P_onboarding/provider_intro_screen.dart';
+import 'screens/provider_screens/P_onboarding/provider_form_screen.dart';
+import 'screens/provider_screens/P_onboarding/provider_signin_screen.dart';
+import 'screens/provider_screens/provider_dashboard_screen.dart';
+import 'screens/provider_screens/profile_screen.dart';
+import 'screens/provider_screens/performance_screen.dart';
+import 'screens/provider_screens/pricing_screen.dart';
+import 'screens/provider_screens/availability_screen.dart';
+import 'screens/provider_screens/certificate_screen.dart';
 
 void main() {
   runApp(const LabourGoApp());
@@ -18,21 +25,27 @@ class LabourGoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'LabourGo',
-      theme: AppTheme.lightTheme,
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/onboarding',
-      routes: {
-        '/onboarding': (context) => const CustomerOnboardingScreen(),
-        '/provider_onboarding': (context) => const ProviderOnboardingScreen(),
-        '/sign_up': (context) => const SignUpScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/service_browsing': (context) => const ServiceBrowsingScreen(),
-        '/provider_profile': (context) => const ProviderProfileScreen(),
-        '/booking_confirmation': (context) => const BookingConfirmationScreen(),
-        '/payment': (context) => const PaymentScreen(),
-      },
-    );
+  return MaterialApp(
+  title: 'LabourGo',
+  theme: AppTheme.lightTheme,
+  debugShowCheckedModeBanner: false,
+  home: const OnboardingSplash(), // ✅ keep this
+  routes: {
+    '/language': (context) => const OnboardingLanguage(),
+    '/carousel': (context) => const OnboardingCarousel(),
+    '/login': (context) => const LoginScreen(),
+    '/register': (context) => const RegisterScreen(),
+    '/customer_dashboard': (context) => const CustomerDashboardTemp(),
+    '/provider_intro': (context) => const ProviderIntroScreen(),
+    '/provider_form': (context) => const ProviderFormScreen(),
+    '/provider_signin': (context) => const ProviderSignInScreen(),
+    '/provider_dashboard': (context) => const ProviderDashboardScreen(),
+    '/profile': (context) => const ProfileScreen(),
+    '/performance': (context) => const PerformanceScreen(),
+    '/pricing': (context) => const PricingScreen(),
+    '/availability': (context) => const AvailabilityScreen(),
+    '/certificates': (context) => const CertificateScreen(),
+  },
+);
   }
-}
+} 

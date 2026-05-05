@@ -2,6 +2,8 @@ from django.db import models
 
 class Provider(models.Model):
     name = models.CharField(max_length=100)
+    email = models.EmailField(blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
     skills = models.TextField()
     experience = models.IntegerField()
     price_per_hour = models.FloatField()

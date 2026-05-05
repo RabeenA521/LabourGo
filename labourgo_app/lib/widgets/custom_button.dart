@@ -36,13 +36,13 @@ class CustomButton extends StatelessWidget {
       button = ElevatedButton(
         onPressed: onPressed,
         style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-          elevation: MaterialStateProperty.resolveWith<double>(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.pressed)) return 4;
+          elevation: WidgetStateProperty.resolveWith<double>(
+            (Set<WidgetState> states) {
+              if (states.contains(WidgetState.pressed)) return 4;
               return 0; // flat by default
             },
           ),
-          shadowColor: MaterialStateProperty.all(AppTheme.primaryBlue),
+          shadowColor: WidgetStateProperty.all(AppTheme.primaryBlue),
         ),
         child: buttonContent,
       );
