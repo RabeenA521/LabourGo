@@ -56,7 +56,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       SwitchListTile(
                         title: Text(key, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15)),
                         value: _prefs[key]!,
-                        activeColor: AppColors.primary,
+                        activeThumbColor: AppColors.primary,
                         onChanged: (val) {
                           setState(() => _prefs[key] = val);
                         },
@@ -81,7 +81,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 },
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.error,
-                  side: BorderSide(color: AppColors.error.withOpacity(0.5)),
+                  side: BorderSide(color: AppColors.error.withValues(alpha: 0.5)),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),

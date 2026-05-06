@@ -31,7 +31,7 @@ class AppTheme {
       seedColor: AppColors.primary,
       primary: AppColors.primary,
       secondary: AppColors.cyan,
-      background: AppColors.background,
+      surface: AppColors.background,
     ),
 
     // AppBar

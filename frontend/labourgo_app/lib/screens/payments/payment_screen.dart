@@ -60,6 +60,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         amount:    widget.amount,
         method:    _selectedMethod,
       );
+      if (!mounted) return;
       if (result.containsKey('transaction_id')) {
         setState(() {
           _paid          = true;
@@ -71,11 +72,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
         );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Payment failed. Try again.')),
       );
     } finally {
-      setState(() => _loading = false);
+      if (mounted) setState(() => _loading = false);
     }
   }
 
@@ -95,7 +97,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             padding: const EdgeInsets.all(10.0),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(Icons.arrow_back_ios_new, size: 14, color: Colors.white),
@@ -169,7 +171,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       border: Border.all(
                         color: _selectedMethod == method['id']
                             ? const Color(0xFF4682B4)
-                            : Colors.grey.withOpacity(0.3),
+                            : Colors.grey.withValues(alpha: 0.3),
                         width: 1,
                       ),
                     ),
@@ -179,7 +181,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           width: 44,
                           height: 44,
                           decoration: BoxDecoration(
-                            color: (method['iconColor'] as Color).withOpacity(0.1),
+                            color: (method['iconColor'] as Color).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Center(
@@ -213,7 +215,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             border: Border.all(
                               color: _selectedMethod == method['id']
                                   ? const Color(0xFF4682B4)
-                                  : Colors.grey.withOpacity(0.3),
+                                  : Colors.grey.withValues(alpha: 0.3),
                               width: _selectedMethod == method['id'] ? 6 : 1.5,
                             ),
                           ),

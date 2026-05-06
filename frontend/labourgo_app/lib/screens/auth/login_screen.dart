@@ -31,8 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushReplacement(
       context,
       PageRouteBuilder(
-        pageBuilder: (_, __, ___) => const HomeScreen(),
-        transitionsBuilder: (_, anim, __, child) =>
+        pageBuilder: (_, _, _) => const HomeScreen(),
+        transitionsBuilder: (_, anim, _, child) =>
             FadeTransition(opacity: anim, child: child),
         transitionDuration: const Duration(milliseconds: 400),
       ),
@@ -144,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       'Find trusted workers near you',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.85),
+                        color: Colors.white.withValues(alpha: 0.85),
                         fontSize: 13,
                       ),
                     ),
@@ -370,7 +370,9 @@ class _SocialCircleButton extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: disabled ? AppColors.border.withOpacity(0.6) : AppColors.border,
+                color: disabled
+                    ? AppColors.border.withValues(alpha: 0.6)
+                    : AppColors.border,
                 width: 1.2,
               ),
             ),
