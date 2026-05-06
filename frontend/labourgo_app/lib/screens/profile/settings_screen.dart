@@ -110,7 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.error,
-                  side: BorderSide(color: AppColors.error.withOpacity(0.5)),
+                  side: BorderSide(color: AppColors.error.withValues(alpha: 0.5)),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -148,7 +148,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       secondary: Icon(icon, color: AppColors.primary, size: 24),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15)),
       value: value,
-      activeColor: AppColors.primary,
+      activeThumbColor: AppColors.primary,
       onChanged: onChanged,
     );
   }

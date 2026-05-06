@@ -68,9 +68,9 @@ class _SplashScreenState extends State<SplashScreen>
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) =>
+          pageBuilder: (_, _, _) =>
               token != null ? const HomeScreen() : const LoginScreen(),
-          transitionsBuilder: (_, anim, __, child) =>
+          transitionsBuilder: (_, anim, _, child) =>
               FadeTransition(opacity: anim, child: child),
           transitionDuration: const Duration(milliseconds: 600),
         ),
@@ -109,7 +109,7 @@ class _SplashScreenState extends State<SplashScreen>
                         borderRadius: BorderRadius.circular(28),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
+                            color: Colors.black.withValues(alpha: 0.15),
                             blurRadius: 20,
                             offset: const Offset(0, 8),
                           ),
@@ -150,7 +150,7 @@ class _SplashScreenState extends State<SplashScreen>
                       'Your trusted labour platform',
                       style: TextStyle(
                         fontSize: 15,
-                        color: Colors.white.withOpacity(0.85),
+                        color: Colors.white.withValues(alpha: 0.85),
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -165,7 +165,7 @@ class _SplashScreenState extends State<SplashScreen>
                         width: 8,
                         height: 8,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(i == 0 ? 1 : 0.4),
+                          color: Colors.white.withValues(alpha: i == 0 ? 1.0 : 0.4),
                           shape: BoxShape.circle,
                         ),
                       )),

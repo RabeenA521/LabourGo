@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // ── Change this to your Mac's IP when testing on real device
-  // Run "ifconfig | grep inet" in terminal to find your IP. 
+  // Run "ifconfig | grep inet" in terminal to find your IP.
   // Current IP is 192.168.1.105. For local web testing, 127.0.0.1 works.
   static const String baseUrl = 'http://127.0.0.1:8000/api';
 
@@ -104,7 +104,9 @@ class ApiService {
     return jsonDecode(response.body);
   }
 
-  static Future<Map<String, dynamic>> updateProfile(Map<String, dynamic> data) async {
+  static Future<Map<String, dynamic>> updateProfile(
+    Map<String, dynamic> data,
+  ) async {
     // In a real app this would PUT/PATCH to a backend endpoint.
     // For now we mock a successful response.
     await Future.delayed(const Duration(seconds: 1));
@@ -158,6 +160,14 @@ class ApiService {
   static Future<List<dynamic>> getMyBookings() async {
     final response = await http.get(
       Uri.parse('$baseUrl/bookings/my-bookings/'),
+      headers: await _authHeaders(),
+    );
+    return jsonDecode(response.body);
+  }
+
+  static Future<List<dynamic>> getMyPayments() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/payments/my-payments/'),
       headers: await _authHeaders(),
     );
     return jsonDecode(response.body);

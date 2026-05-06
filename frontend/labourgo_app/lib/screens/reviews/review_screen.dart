@@ -23,6 +23,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
         rating:    _rating,
         comment:   _commentCtrl.text.trim(),
       );
+      if (!mounted) return;
       if (result.containsKey('review')) {
         setState(() => _done = true);
       } else {
@@ -31,11 +32,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
         );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to submit review.')),
       );
     } finally {
-      setState(() => _loading = false);
+      if (mounted) setState(() => _loading = false);
     }
   }
 

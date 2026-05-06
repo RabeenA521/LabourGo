@@ -11,16 +11,16 @@ class CreateBookingScreen extends StatefulWidget {
 }
 
 class _CreateBookingScreenState extends State<CreateBookingScreen> {
-  final _descCtrl     = TextEditingController();
+  final _descCtrl = TextEditingController();
   final _locationCtrl = TextEditingController();
-  final _priceCtrl    = TextEditingController();
+  final _priceCtrl = TextEditingController();
 
-  List<dynamic> _providers     = [];
-  int?          _selectedProvider;
-  DateTime      _selectedDate  = DateTime.now().add(const Duration(days: 1));
-  TimeOfDay     _selectedTime  = const TimeOfDay(hour: 10, minute: 0);
-  bool          _loading       = false;
-  bool          _loadingProviders = true;
+  List<dynamic> _providers = [];
+  int? _selectedProvider;
+  DateTime _selectedDate = DateTime.now().add(const Duration(days: 1));
+  TimeOfDay _selectedTime = const TimeOfDay(hour: 10, minute: 0);
+  bool _loading = false;
+  bool _loadingProviders = true;
 
   @override
   void initState() {
@@ -32,7 +32,7 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
     try {
       final providers = await ApiService.getProviders();
       setState(() {
-        _providers        = providers;
+        _providers = providers;
         _loadingProviders = false;
       });
     } catch (e) {
@@ -42,17 +42,17 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
 
   Future<void> _pickDate() async {
     final date = await showDatePicker(
-      context:     context,
+      context: context,
       initialDate: _selectedDate,
-      firstDate:   DateTime.now(),
-      lastDate:    DateTime.now().add(const Duration(days: 90)),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 90)),
     );
     if (date != null) setState(() => _selectedDate = date);
   }
 
   Future<void> _pickTime() async {
     final time = await showTimePicker(
-      context:     context,
+      context: context,
       initialTime: _selectedTime,
     );
     if (time != null) setState(() => _selectedTime = time);
@@ -60,15 +60,15 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
 
   Future<void> _createBooking() async {
     if (_selectedProvider == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a provider')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please select a provider')));
       return;
     }
     if (_descCtrl.text.isEmpty || _locationCtrl.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please fill all fields')));
       return;
     }
 
@@ -76,9 +76,9 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
 
     try {
       final result = await ApiService.createBooking(
-        providerId:      _selectedProvider!,
-        categoryId:      widget.category['id'],
-        description:     _descCtrl.text.trim(),
+        providerId: _selectedProvider!,
+        categoryId: widget.category['id'],
+        description: _descCtrl.text.trim(),
         locationAddress: _locationCtrl.text.trim(),
         scheduledDate:
             '${_selectedDate.year}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}',
@@ -101,7 +101,8 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
               ],
             ),
             content: const Text(
-                'Your booking is submitted successfully.\nStatus: Pending'),
+              'Your booking is submitted successfully.\nStatus: Pending',
+            ),
             actions: [
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
@@ -119,9 +120,9 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
         Navigator.pop(context, true);
       } else {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result.toString())),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(result.toString())));
       }
     } catch (e) {
       if (!mounted) return;
@@ -148,27 +149,30 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   // Category banner
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1976D2).withOpacity(0.1),
+                      color: const Color(0xFF1976D2).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                          color: const Color(0xFF1976D2).withOpacity(0.3)),
+                        color: const Color(0xFF1976D2).withValues(alpha: 0.3),
+                      ),
                     ),
                     child: Row(
                       children: [
                         const Icon(Icons.handyman, color: Color(0xFF1976D2)),
                         const SizedBox(width: 8),
-                        Text(
-                          widget.category['name'],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF1976D2),
-                            fontSize: 16,
+                        Hero(
+                          tag: 'category-${widget.category['name']}',
+                          child: Text(
+                            widget.category['name'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1976D2),
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ],
@@ -197,14 +201,16 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                                 _selectedProvider == provider['id'];
                             return GestureDetector(
                               onTap: () => setState(
-                                  () => _selectedProvider = provider['id']),
+                                () => _selectedProvider = provider['id'],
+                              ),
                               child: Container(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
                                   color: isSelected
-                                      ? const Color(0xFF1976D2)
-                                          .withOpacity(0.1)
+                                      ? const Color(
+                                          0xFF1976D2,
+                                        ).withValues(alpha: 0.1)
                                       : Colors.white,
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
@@ -216,16 +222,24 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                                 ),
                                 child: Row(
                                   children: [
-                                    CircleAvatar(
-                                      backgroundColor: const Color(0xFF1976D2)
-                                          .withOpacity(0.2),
-                                      child: Text(
-                                        provider['full_name'] != null && provider['full_name'].toString().isNotEmpty
-                                            ? provider['full_name'][0].toUpperCase()
-                                            : 'P',
-                                        style: const TextStyle(
-                                          color: Color(0xFF1976D2),
-                                          fontWeight: FontWeight.bold,
+                                    Hero(
+                                      tag: 'provider-avatar-${provider['id']}',
+                                      child: CircleAvatar(
+                                        backgroundColor: const Color(
+                                          0xFF1976D2,
+                                        ).withValues(alpha: 0.2),
+                                        child: Text(
+                                          provider['full_name'] != null &&
+                                                  provider['full_name']
+                                                      .toString()
+                                                      .isNotEmpty
+                                              ? provider['full_name'][0]
+                                                    .toUpperCase()
+                                              : 'P',
+                                          style: const TextStyle(
+                                            color: Color(0xFF1976D2),
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -234,23 +248,31 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          provider['full_name'] ?? 'Unknown',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w600),
+                                        Hero(
+                                          tag:
+                                              'provider-name-${provider['id']}',
+                                          child: Text(
+                                            provider['full_name'] ?? 'Unknown',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
                                         ),
                                         Text(
                                           provider['phone'] ?? '',
                                           style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 12),
+                                            color: Colors.grey,
+                                            fontSize: 12,
+                                          ),
                                         ),
                                       ],
                                     ),
                                     const Spacer(),
                                     if (isSelected)
-                                      const Icon(Icons.check_circle,
-                                          color: Color(0xFF1976D2)),
+                                      const Icon(
+                                        Icons.check_circle,
+                                        color: Color(0xFF1976D2),
+                                      ),
                                   ],
                                 ),
                               ),
@@ -268,7 +290,8 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                     decoration: InputDecoration(
                       hintText: 'e.g. My kitchen sink is leaking...',
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       filled: true,
                       fillColor: Colors.white,
                     ),
@@ -284,7 +307,8 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                       hintText: 'House #, Street, Area, City',
                       prefixIcon: const Icon(Icons.location_on_outlined),
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       filled: true,
                       fillColor: Colors.white,
                     ),
@@ -308,13 +332,17 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.calendar_today,
-                                    color: Color(0xFF1976D2), size: 18),
+                                const Icon(
+                                  Icons.calendar_today,
+                                  color: Color(0xFF1976D2),
+                                  size: 18,
+                                ),
                                 const SizedBox(width: 8),
                                 Text(
                                   '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w500),
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ],
                             ),
@@ -334,13 +362,17 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.access_time,
-                                    color: Color(0xFF1976D2), size: 18),
+                                const Icon(
+                                  Icons.access_time,
+                                  color: Color(0xFF1976D2),
+                                  size: 18,
+                                ),
                                 const SizedBox(width: 8),
                                 Text(
                                   _selectedTime.format(context),
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w500),
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ],
                             ),
@@ -361,7 +393,8 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                       hintText: 'e.g. 1500',
                       prefixIcon: const Icon(Icons.attach_money),
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       filled: true,
                       fillColor: Colors.white,
                     ),
@@ -383,12 +416,14 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
                         ),
                       ),
                       child: _loading
-                          ? const CircularProgressIndicator(
-                              color: Colors.white)
-                          : const Text('Confirm Booking',
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              'Confirm Booking',
                               style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold)),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                     ),
                   ),
 
@@ -400,10 +435,10 @@ class _CreateBookingScreenState extends State<CreateBookingScreen> {
   }
 
   Widget _sectionTitle(String text) => Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Text(
-          text,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-        ),
-      );
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Text(
+      text,
+      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+    ),
+  );
 }
