@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ErrorBanner extends StatelessWidget {
-  const ErrorBanner({super.key, required this.message});
+  const ErrorBanner({
+    super.key,
+    required this.message,
+  });
 
   final String message;
 
@@ -12,18 +15,28 @@ class ErrorBanner extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.red.shade50,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.red.shade200),
+        color: const Color(0xFFFFEBEE),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: const Color(0xFFEF9A9A),
+        ),
       ),
       child: Row(
         children: [
-          const Icon(Icons.error_outline, color: Colors.red, size: 18),
-          const SizedBox(width: 8),
+          const Icon(
+            Icons.error_outline,
+            color: Color(0xFFE53935),
+            size: 18,
+          ),
+          const SizedBox(width: 10),
           Expanded(
             child: Text(
               message,
-              style: const TextStyle(color: Colors.red),
+              style: const TextStyle(
+                color: Color(0xFFE53935),
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],

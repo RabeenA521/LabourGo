@@ -5,7 +5,7 @@ import '../../services/social_auth_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/error_banner.dart';
-import '../customer_dashboard_temp.dart';
+import '../bookings/home_screen.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const CustomerDashboardTemp(),
+          pageBuilder: (_, __, ___) => const HomeScreen(),
           transitionsBuilder: (_, anim, __, child) =>
               FadeTransition(opacity: anim, child: child),
           transitionDuration: const Duration(milliseconds: 400),
@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushReplacement(
       context,
       PageRouteBuilder(
-        pageBuilder: (_, __, ___) => const CustomerDashboardTemp(),
+        pageBuilder: (_, __, ___) => const HomeScreen(),
         transitionsBuilder: (_, anim, __, child) =>
             FadeTransition(opacity: anim, child: child),
         transitionDuration: const Duration(milliseconds: 400),

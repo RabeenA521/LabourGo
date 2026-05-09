@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../customer_dashboard_temp.dart';
 import 'onboarding_language.dart';
+import '../bookings/home_screen.dart';
 
 class OnboardingSplash extends StatefulWidget {
   const OnboardingSplash({super.key});
@@ -49,7 +49,7 @@ class _OnboardingSplashState extends State<OnboardingSplash>
     final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
     if (!mounted) return;
     final next =
-        isLoggedIn ? const CustomerDashboardTemp() : const OnboardingLanguage();
+        isLoggedIn ? const HomeScreen() : const OnboardingLanguage();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => next),

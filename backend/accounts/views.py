@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 
 from .serializers import RegisterSerializer, UserProfileSerializer
+from .social_auth import SocialAuthError, verify_social_login
 
 User = get_user_model()
 
@@ -117,3 +118,101 @@ class LogoutView(APIView):
                 {'error': 'Invalid or already blacklisted token.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+class ProviderListView(generics.ListAPIView):
+    """
+    GET /api/auth/providers/
+    Returns all service providers.
+    Customers use this to pick who to book.
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class   = UserProfileSerializer
+
+    def get_queryset(self):
+        return User.objects.filter(role='providers', is_active=True)
+
+
+class SocialLoginView(APIView):
+    """
+    POST /api/auth/social-login/
+    Body:
+      - provider: "google" | "apple" | "facebook"
+      - id_token (google/apple) OR access_token (facebook)
+    Returns JWT tokens on success. Creates the user on first sign-in.
+    """
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        provider = (request.data.get('provider') or '').strip()
+        id_token = request.data.get('id_token')
+        access_token = request.data.get('access_token')
+        requested_role = (request.data.get('role') or 'customer').strip() or 'customer'
+
+        if not provider:
+            return Response({'error': 'Provider is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            info = verify_social_login(
+                provider=provider,
+                id_token=id_token,
+                access_token=access_token,
+            )
+        except SocialAuthError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        provider_field = {
+            'google': 'google_sub',
+            'apple': 'apple_sub',
+            'facebook': 'facebook_id',
+        }[info.provider]
+
+        user = User.objects.filter(**{provider_field: info.provider_user_id}).first()
+
+        fallback_email = request.data.get('email')
+        fallback_full_name = request.data.get('full_name')
+        email = info.email or fallback_email
+        full_name = fallback_full_name or info.full_name
+
+        if user is None and email:
+            user = User.objects.filter(email__iexact=email).first()
+            if user is not None:
+                changed_fields = []
+                if getattr(user, provider_field) != info.provider_user_id:
+                    setattr(user, provider_field, info.provider_user_id)
+                    changed_fields.append(provider_field)
+                if (not getattr(user, 'full_name', None)) and full_name:
+                    user.full_name = full_name
+                    changed_fields.append('full_name')
+                if changed_fields:
+                    user.save(update_fields=changed_fields)
+
+        if user is None:
+            if not email:
+                return Response(
+                    {'error': 'Provider did not return an email address for this user.'},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            if not full_name:
+                full_name = email.split('@')[0]
+
+            user = User.objects.create_user(
+                email=email,
+                full_name=full_name,
+                phone='',
+                role=requested_role if requested_role in ('customer', 'provider') else 'customer',
+                password=None,
+            )
+            setattr(user, provider_field, info.provider_user_id)
+            user.save(update_fields=[provider_field])
+
+        tokens = get_tokens_for_user(user)
+        return Response(
+            {
+                'message': 'Login successful!',
+                'user': UserProfileSerializer(user).data,
+                'tokens': tokens,
+            },
+            status=status.HTTP_200_OK,
+        )

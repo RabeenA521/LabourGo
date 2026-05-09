@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../customer_dashboard_temp.dart';
+import '../auth/login_screen.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/error_banner.dart';
 
@@ -58,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (mounted) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => const CustomerDashboardTemp()),
+            MaterialPageRoute(builder: (_) => const LoginScreen()),
           );
         }
       } else {

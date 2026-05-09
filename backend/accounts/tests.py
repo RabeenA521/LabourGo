@@ -13,6 +13,7 @@ class AuthAPITest(TestCase):
         self.client = APIClient()
         self.register_url = '/api/auth/register/'
         self.login_url    = '/api/auth/login/'
+        self.social_login_url = '/api/auth/social-login/'
 
     def test_customer_registration(self):
         """Customer can register successfully."""
@@ -58,3 +59,15 @@ class AuthAPITest(TestCase):
         """Profile endpoint returns 401 without token."""
         response = self.client.get('/api/auth/profile/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_social_login_requires_provider(self):
+        response = self.client.post(self.social_login_url, {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_social_login_google_requires_id_token(self):
+        response = self.client.post(
+            self.social_login_url,
+            {'provider': 'google'},
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
