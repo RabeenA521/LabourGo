@@ -27,7 +27,7 @@ def remove_default_admin(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0003_add_social_ids'),
+        ('accounts', '0004_add_social_ids'),
     ]
 
     operations = [
