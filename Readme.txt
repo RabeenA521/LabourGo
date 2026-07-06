@@ -27,7 +27,7 @@ LabourGo is a full-stack labour hiring platform that connects customers with ski
 
 ## My Contributions
 
-- Flutter frontend development
+- Full stack devlopment of customer module using flutter and Django Rest
 - API integration
 - Booking module implementation
 - JWT authentication
